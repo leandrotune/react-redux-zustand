@@ -1,14 +1,7 @@
-import { useAppSelector } from '@/redux/store'
+import { useCurrentLesson } from '@/redux/slices/player'
 
 export function Header() {
-  const { currentModule, currentLesson } = useAppSelector((state) => {
-    const { currentModuleIndex, currentLessonIndex } = state.player
-
-    const currentModule = state.player.course.modules[currentModuleIndex]
-    const currentLesson = currentModule.lessons[currentLessonIndex]
-
-    return { currentLesson, currentModule }
-  })
+  const { currentModule, currentLesson } = useCurrentLesson()
 
   return (
     <header className="flex flex-col gap-1">
