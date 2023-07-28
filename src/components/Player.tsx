@@ -5,11 +5,22 @@ import { MessageCircle } from 'lucide-react'
 import { Header } from './Header'
 import { Video } from './Video'
 import { Module } from './Module'
+import { useEffect } from 'react'
+import { api } from '@/lib/axios'
+import { useDispatch } from 'react-redux'
+import { start } from '@/redux/slices/player'
 
 export function Player() {
+  const dispatch = useDispatch()
   const modules = useAppSelector((state) => {
-    return state.player.course.modules
+    return state.player.course?.modules
   })
+
+  useEffect(() => {
+    api.get('/courses/1').then((response) => {
+      dispatch(start(response.data))
+    })
+  }, [dispatch])
 
   return (
     <div className="flex h-screen items-center justify-center bg-zinc-950 text-zinc-50">
@@ -30,16 +41,17 @@ export function Player() {
             <Video />
           </div>
           <aside className="absolute bottom-0 right-0 top-0 w-80 divide-y-2 divide-zinc-900 overflow-y-scroll border-l border-zinc-800 bg-zinc-900 scrollbar scrollbar-thin scrollbar-track-zinc-950 scrollbar-thumb-zinc-800">
-            {modules.map((module, index) => {
-              return (
-                <Module
-                  key={module.id}
-                  moduleIndex={index}
-                  title={module.title}
-                  amountOfLessons={module.lessons.length}
-                />
-              )
-            })}
+            {modules &&
+              modules.map((module, index) => {
+                return (
+                  <Module
+                    key={module.id}
+                    moduleIndex={index}
+                    title={module.title}
+                    amountOfLessons={module.lessons?.length}
+                  />
+                )
+              })}
           </aside>
         </main>
       </div>

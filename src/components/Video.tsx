@@ -13,6 +13,10 @@ export function Video() {
     dispatch(next())
   }
 
+  if (!currentLesson) {
+    return null
+  }
+
   return (
     <div className="aspect-video w-full bg-zinc-950">
       <Player
